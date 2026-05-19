@@ -88,3 +88,36 @@ st.bar_chart(chart_data)
 st.subheader("QA Terms Table")
 
 st.dataframe(bug_df)
+
+# ---------------------------------
+# REVIEW EXPLORER
+# ---------------------------------
+
+st.subheader("QA Review Explorer")
+
+review_files = glob.glob(
+    "data/processed/bug_reviews/*.csv"
+)
+
+if not review_files:
+    st.warning("No QA review files found.")
+    st.stop()
+
+review_df = pd.read_csv(review_files[0])
+
+selected_word = st.selectbox(
+    "Select a QA Term",
+    sorted(review_df["word"].unique())
+)
+
+filtered_reviews = review_df[
+    review_df["word"] == selected_word
+]
+
+st.write(
+    f"Reviews mentioning '{selected_word}'"
+)
+
+st.dataframe(
+    filtered_reviews[["review_text"]]
+)

@@ -33,7 +33,16 @@ reviews = df.select(
 # explode words
 # -----------------------------
 
-words = reviews.select(
+from pyspark.sql.functions import regexp_replace
+
+clean_reviews = df.select(
+    lower(
+        regexp_replace(col("review_text"), "[^a-zA-Z0-9 ]", "")
+    ).alias("review_text")
+)
+
+words = clean_reviews.select(
+    col("review_text"),
     explode(
         split(col("review_text"), " ")
     ).alias("word")
@@ -82,6 +91,18 @@ results.show()
 
 results.write.csv(
     "data/processed/bug_metrics",
+    header=True,
+    mode="overwrite"
+)
+# ---------------------------------
+# SAVE REVIEWS RELATED TO QA TERMS
+# ---------------------------------
+
+filtered_words.select(
+    "word",
+    "review_text"
+).coalesce(1).write.csv(
+    "data/processed/bug_reviews",
     header=True,
     mode="overwrite"
 )
