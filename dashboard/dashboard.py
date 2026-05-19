@@ -25,7 +25,7 @@ if not bug_files:
     st.error("Bug metrics CSV not found.")
     st.stop()
 
-bug_df = pd.read_csv(bug_files[0])
+bug_df = pd.read_csv(bug_files[0], encoding="utf-8")
 
 # ---------------------------------
 # LOAD KPI METRICS
@@ -39,7 +39,7 @@ if not kpi_files:
     st.error("KPI metrics CSV not found.")
     st.stop()
 
-kpi_df = pd.read_csv(kpi_files[0])
+kpi_df = pd.read_csv(kpi_files[0], encoding="utf-8")
 
 kpi = kpi_df.iloc[0]
 
@@ -103,7 +103,7 @@ if not review_files:
     st.warning("No QA review files found.")
     st.stop()
 
-review_df = pd.read_csv(review_files[0])
+review_df = pd.read_csv(review_files[0], encoding="utf-8")
 
 selected_word = st.selectbox(
     "Select a QA Term",
@@ -134,7 +134,7 @@ if not severity_files:
     st.warning("No severity data found. Run Spark job first.")
     st.stop()
 
-severity_df = pd.read_csv(severity_files[0])
+severity_df = pd.read_csv(severity_files[0], encoding="utf-8")
 
 # ----------------------------
 # CLICKABLE SEVERITY SELECT
@@ -155,7 +155,7 @@ if not review_files:
     st.warning("No review data found.")
     st.stop()
 
-review_df = pd.read_csv(review_files[0])
+review_df = pd.read_csv(review_files[0], encoding="utf-8")
 
 # ----------------------------
 # FILTER REVIEWS BY SEVERITY WORDS
