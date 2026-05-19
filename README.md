@@ -1,20 +1,16 @@
 # Steam BigData - QA Analytics
 
-Analisador de reviews do Steam que detecta menções de bugs em jogos indie usando Apache Spark.
+Analisador de reviews Steam que detecta bugs em jogos indie usando Apache Spark.
 
-## Tecnologias
+## Stack
 
-- **Python** - Processamento de dados
-- **Apache Spark** - MapReduce e SQL para análise em larga escala
-- **Streamlit** - Dashboard interativo
-- **Pandas** - Manipulação de dados
-- **Altair** - Visualizações
+Python | Apache Spark | Streamlit | Pandas | Altair
 
-## O que faz
+## Funcionalidade
 
-Converte reviews JSON para CSV, analisa frequência de termos QA (crash, bug, lag, etc.), calcula KPIs de qualidade e exibe em dashboard interativo.
+JSON → CSV → MapReduce (termos QA) → KPIs → Dashboard
 
-## Quick Start
+## Executar
 
 ```bash
 pip install -r requirements.txt
@@ -23,4 +19,6 @@ spark-submit spark/bug_analysis.py && spark-submit spark/qa_insights.py
 streamlit run dashboard/dashboard.py
 ```
 
-Acesse: http://localhost:8501
+Dashboard: http://localhost:8501
+Deploy realizado em: https://buganalytics.streamlit.app/
+

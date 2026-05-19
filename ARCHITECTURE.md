@@ -1,9 +1,1 @@
-# Arquitetura
-
-JSON bruto → Limpeza → MapReduce (contagem de termos) → KPIs → Dashboard
-
-**Camadas:**
-- Ingestion: JSON → CSV (clean_reviews.py)
-- Analytics: MapReduce para frequência de termos (bug_analysis.py)
-- Insights: KPIs com Spark SQL (qa_insights.py)
-- Presentation: Dashboard Streamlit (dashboard.py)
+# Arquitetura\n\nJSON → Limpeza → MapReduce → KPIs → Dashboard\n\n**Componentes:**\n- clean_reviews.py (JSON → CSV)\n- bug_analysis.py (contagem de termos)\n- qa_insights.py (cálculo de KPIs)\n- dashboard.py (visualização)

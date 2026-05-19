@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("Steam Indie Games QA Analytics")
+st.title("Steam Indie Games QA Analytics - case study: Relic Hunters Zero")
 
 # ---------------------------------
 # LOAD BUG METRICS
