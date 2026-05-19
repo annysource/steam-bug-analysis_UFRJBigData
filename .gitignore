@@ -9,9 +9,3 @@ data/processed/
 spark-warehouse/
 
 .DS_Store
-
-*.csv
-*.json
-
-data/*.csv
-data/*.json
