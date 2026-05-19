@@ -27,6 +27,7 @@ df = spark.read.csv(
 reviews = df.select(
     lower(col("review_text")).alias("review_text")
 )
+#---------
 
 # -----------------------------
 # MAP STEP
@@ -37,21 +38,26 @@ from pyspark.sql.functions import regexp_replace
 
 clean_reviews = df.select(
     lower(
-        regexp_replace(col("review_text"), "[^a-zA-Z0-9 ]", "")
+        regexp_replace(
+            col("review_text").cast("string"),
+            "[^a-zA-Z0-9 ]",
+            ""
+        )
     ).alias("review_text")
 )
+
 
 words = clean_reviews.select(
     col("review_text"),
     explode(
         split(col("review_text"), " ")
     ).alias("word")
-)
+).filter(col("word") != "")
 
 # -----------------------------
 # FILTER QA TERMS
 # -----------------------------
-
+print("TOTAL WORDS:", words.count())
 qa_terms = [
     "crash",
     "bug",
@@ -72,17 +78,21 @@ filtered_words = words.filter(
 # REDUCE STEP
 # count occurrences
 # -----------------------------
-
-results = filtered_words.groupBy(
-    "word"
-).count().orderBy(
-    col("count").desc()
+filtered_words.select(
+    "word",
+    "review_text"
+).write.mode("overwrite").option("header", True).csv(
+    "data/processed/bug_reviews"
 )
 
 # -----------------------------
 # SHOW RESULTS
 # -----------------------------
-
+results = filtered_words.groupBy(
+    "word"
+).count().orderBy(
+    col("count").desc()
+)
 results.show()
 
 # -----------------------------
@@ -106,6 +116,19 @@ filtered_words.select(
     header=True,
     mode="overwrite"
 )
-
+from pyspark.sql.functions import when
+severity_df = filtered_words.withColumn(
+    "severity",
+    when(col("word").isin(["crash", "freeze", "broken"]), "critical")
+    .when(col("word").isin(["glitch", "stutter", "bug"]), "medium")
+    .when(col("word").isin(["lag", "fps", "optimization"]), "low")
+)
+severity_metrics = severity_df.groupBy("severity").count()
+severity_metrics.write.csv(
+    "data/processed/qa_severity",
+    header=True,
+    mode="overwrite"
+)
+severity_metrics.show()
 
 print("QA metrics generated.")

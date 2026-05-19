@@ -121,3 +121,64 @@ st.write(
 st.dataframe(
     filtered_reviews[["review_text"]]
 )
+
+import glob
+import pandas as pd
+import streamlit as st
+
+st.subheader("QA Severity Explorer")
+
+severity_files = glob.glob("./data/processed/qa_severity/*.csv")
+
+if not severity_files:
+    st.warning("No severity data found. Run Spark job first.")
+    st.stop()
+
+severity_df = pd.read_csv(severity_files[0])
+
+# ----------------------------
+# CLICKABLE SEVERITY SELECT
+# ----------------------------
+
+selected_severity = st.radio(
+    "Select severity level",
+    severity_df["severity"].unique()
+)
+
+# ----------------------------
+# LOAD REVIEWS (IMPORTANTE)
+# ----------------------------
+
+review_files = glob.glob("./data/processed/bug_reviews/*.csv")
+
+if not review_files:
+    st.warning("No review data found.")
+    st.stop()
+
+review_df = pd.read_csv(review_files[0])
+
+# ----------------------------
+# FILTER REVIEWS BY SEVERITY WORDS
+# ----------------------------
+
+severity_map = {
+    "critical": ["crash", "freeze", "broken"],
+    "medium": ["glitch", "stutter", "bug"],
+    "low": ["lag", "fps", "optimization"]
+}
+
+words = severity_map.get(selected_severity, [])
+
+filtered_reviews = review_df[
+    review_df["word"].isin(words)
+]
+
+# ----------------------------
+# SHOW RESULTS
+# ----------------------------
+
+st.write(f"Reviews with severity: {selected_severity}")
+
+for review in filtered_reviews["review_text"].head(50):
+    with st.expander("View review"):
+        st.write(review)
