@@ -22,3 +22,11 @@ streamlit run dashboard/dashboard.py
 Dashboard: http://localhost:8501
 Deploy realizado em: https://buganalytics.streamlit.app/
 
+
+
+baseado em @article{jorge2023steambr,
+  title={SteamBR: a dataset for game reviews and evaluation of a state-of-the-art method for helpfulness prediction},
+  author={Jorge, Germano Antonio Zani and Pardo, Thiago Alexandre Salgueiro},
+  journal={Anais},
+  year={2023}
+}
